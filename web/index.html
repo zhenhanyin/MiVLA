@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiVLA: Towards Generalizable Vision-Language-Action Model</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="title-section">
+                <h1 class="main-title">
+                  <span class="title-highlight">MiVLA</span>: Towards Generalizable Vision-Language-Action Model with Human-Robot Mutual Imitation Pre-training
+              </h1>
+                <div class="authors-section">
+                    <div class="authors">
+                        <span class="author-placeholder">Anonymous CVPR submission</span>
+                    </div>
+                    <div class="affiliations">
+                        <!-- Affiliations will be added here -->
+                    </div>
+                    <div class="paper-id">
+                        <span class="paper-id-text">Paper ID 13397</span>
+                    </div>
+                </div>
+                <div class="links-section">
+                    <a href="#" class="link-btn" id="paper-link">
+                        <i class="fas fa-file-pdf"></i> Paper
+                    </a>
+                    <a href="#" class="link-btn" id="code-link">
+                        <i class="fab fa-github"></i> Code
+                    </a>
+                    <a href="#" class="link-btn" id="video-link">
+                        <i class="fas fa-play"></i> Video
+                    </a>
+                    <a href="#" class="link-btn" id="dataset-link">
+                        <i class="fas fa-database"></i> Dataset
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Abstract Section -->
+    <section class="abstract">
+        <div class="container">
+            <h2 class="section-title">Abstract</h2>
+            <div class="abstract-content">
+                <p>While leveraging abundant human videos and simulated robot data poses a scalable solution to the scarcity of real-world robot data, the generalization capability of existing vision-language-action models (VLAs) remains limited by mismatches in camera views, visual appearance, and embodiment morphologies. To overcome this limitation, we propose MiVLA, a generalizable VLA empowered by human-robot mutual imitation pre-training, which leverages inherent behavioral similarity between human hands and robotic arms to build a foundation of strong behavioral priors for both human actions and robotic control. Specifically, our method utilizes kinematic rules with left/right hand coordinate systems for bidirectional alignment between human and robot action spaces. Given human or simulated robot demonstrations, MiVLA is trained to forecast behavior trajectories for one embodiment, and imitate behaviors for another one unseen in the demonstration. Based on this mutual imitation, it integrates the behavioral fidelity of real-world human data with the manipulative diversity of simulated robot data into a unified model, thereby enhancing the generalization capability for downstream tasks. Extensive experiments conducted on both simulation and real-world platforms with three robots (ARX, PiPer and LocoMan), demonstrate that MiVLA achieves strong improved generalization capability, outperforming state-of-the-art VLAs (e.g., π₀, π₀.₅ and H-RDT) by 25% in simulation, and 14% in real-world robot control tasks.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Demo Section -->
+    <section class="demo">
+        <div class="container">
+            <h2 class="section-title">Demonstration</h2>
+            <div class="video-container">
+                <video id="demo-video" controls poster="images/mivla_demo_poster.jpg" class="demo-video">
+                    <source src="videos/mivla_demo.mp4" type="video/mp4">
+                    <source src="videos/mivla_demo.webm" type="video/webm">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="video-overlay" id="video-overlay">
+                    <i class="fas fa-play"></i>
+                    <p>Click to play demonstration</p>
+                </div>
+            </div>
+            <div class="demo-description">
+                <p>Observe the performance of MiVLA on three real machine bodies and three different tasks.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Method Overview -->
+    <section class="method">
+        <div class="container">
+            <h2 class="section-title">Method</h2>
+
+            <!-- Model Architecture -->
+            <div class="architecture-section">
+                <h3 class="subsection-title">MiVLA Architecture</h3>
+                <div class="architecture-container">
+                    <div class="architecture-image">
+                        <img src="images/mivla_architecture.png" alt="MiVLA Model Architecture" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div class="image-placeholder architecture-placeholder">
+                            <i class="fas fa-project-diagram"></i>
+                            <p>Model Architecture Image</p>
+                            <small>Add your architecture diagram to <code>images/mivla_architecture.png</code></small>
+                        </div>
+                    </div>
+                    <div class="architecture-description">
+                        <p>MiVLA employs a vision-language-action transformer architecture that processes multi-modal inputs through human-robot mutual imitation pre-training. The model consists of:</p>
+                        <ul>
+                            <li><strong>Vision Encoder</strong>: Processes visual observations from multiple viewpoints</li>
+                            <li><strong>Language Encoder</strong>: Encodes task instructions and natural language descriptions</li>
+                            <li><strong>Action Decoder</strong>: Generates robot control sequences with bidirectional alignment</li>
+                            <li><strong>Mutual Imitation Module</strong>: Aligns human hand demonstrations with robot arm actions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Components -->
+            <div class="method-overview">
+                <h3 class="subsection-title">Key Components</h3>
+                <div class="method-grid">
+                    <div class="method-card">
+                        <div class="method-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <h3>Mutual Imitation</h3>
+                        <p>Bidirectional alignment between human and robot action spaces using kinematic rules with left/right hand coordinate systems</p>
+                    </div>
+                    <div class="method-card">
+                        <div class="method-icon">
+                            <i class="fas fa-hand-paper"></i>
+                        </div>
+                        <h3>Behavioral Similarity</h3>
+                        <p>Leverages inherent behavioral similarity between human hands and robotic arms to build strong behavioral priors</p>
+                    </div>
+                    <div class="method-card">
+                        <div class="method-icon">
+                            <i class="fas fa-sync"></i>
+                        </div>
+                        <h3>Cross-Embodiment Training</h3>
+                        <p>Forecasts behavior trajectories for one embodiment while imitating behaviors for another unseen embodiment</p>
+                    </div>
+                    <div class="method-card">
+                        <div class="method-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>Multi-Robot Platform</h3>
+                        <p>Validated on three different robots: ARX, PiPer, and LocoMan across simulation and real-world tasks</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Model Comparison Section -->
+    <section class="model-comparison">
+        <div class="container">
+            <h2 class="section-title">Model Comparison</h2>
+            <div class="model-comparison-content">
+                <div class="model-comparison-item">
+                    <h3>Real-World Model Performance</h3>
+                    <p>Comparison of MiVLA model performance against baseline methods in real-world robotic manipulation tasks, demonstrating superior generalization and adaptation capabilities.</p>
+                    <div class="model-comparison-img-container">
+                        <img src="images/model_real_compare.png" alt="Model Real World Comparison" class="model-comparison-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results">
+        <div class="container">
+            <h2 class="section-title">Results</h2>
+            <div class="results-content">
+                <div class="results-vertical-layout">
+                    <!-- Performance Comparison Chart -->
+                    <div class="result-item">
+                        <div class="result-chart">
+                            <img src="images/performance_comparison.png" alt="Performance Comparison Chart" class="performance-chart-img">
+                        </div>
+                        <h3>Performance Comparison</h3>
+                        <p>Extensive experiments on ARX, PiPer, and LocoMan robots across simulation and real-world platforms. MiVLA outperforms state-of-the-art VLAs by 25% in simulation and 14% in real-world tasks.</p>
+                    </div>
+
+                    <!-- Statistics Section -->
+                    <div class="result-item">
+                        <div class="result-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">3</span>
+                                <span class="stat-label">Robot Platforms Validated</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">+25%</span>
+                                <span class="stat-label">Simulation Improvement</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">+14%</span>
+                                <span class="stat-label">Real-World Improvement</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Citation Section -->
+    <section class="citation">
+        <div class="container">
+            <h2 class="section-title">Citation</h2>
+            <div class="citation-box">
+                <pre><code></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Acknowledgments -->
+    <section class="acknowledgments">
+        <div class="container">
+            <h2 class="section-title">Acknowledgments</h2>
+            <p>We thank the anonymous reviewers for their valuable feedback. This work was supported by [Grant Information]. We also thank the contributors to the open-source community for their tools and frameworks.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 MiVLA Project. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
