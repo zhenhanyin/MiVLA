@@ -6,7 +6,7 @@
 
 **CVPR 2026 Findings**
 
-[Paper (arXiv)](https://arxiv.org/abs/2512.15411) · [CVPR 2026 Findings poster](https://cvpr.thecvf.com/virtual/2026/poster/40664) · [Demo video](web/videos/mivla_demo.mp4) · [Citation](#citation)
+[Paper (arXiv)](https://arxiv.org/abs/2512.15411) · [CVPR 2026 Findings poster](https://cvpr.thecvf.com/virtual/2026/poster/40664) · [Open or download demo MP4 (8.7 MB)](https://github.com/zhenhanyin/MiVLA/raw/main/web/videos/mivla_demo.mp4) · [Citation](#citation)
 
 </div>
 
@@ -34,7 +34,9 @@ The following numbers are reported in the paper. Simulation results are averages
 
 The physical robot experiments use **30 expert demonstrations per task for fine-tuning**. The human-video and simulated-robot data are used in pre-training; the physical robot numbers are not zero-shot deployment results. See the [paper](https://arxiv.org/abs/2512.15411) for per-task comparisons and ablations.
 
-[![MiVLA demonstration](web/images/mivla_demo_poster.jpg)](web/videos/mivla_demo.mp4)
+[![MiVLA demonstration](web/images/mivla_demo_poster.jpg)](https://github.com/zhenhanyin/MiVLA/raw/main/web/videos/mivla_demo.mp4)
+
+GitHub may not preview this MP4 on its repository file page. Use the link above to open or download the original video file.
 
 ## Repository layout
 
