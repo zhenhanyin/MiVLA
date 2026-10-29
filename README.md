@@ -1,186 +1,119 @@
-
-## 📰 News
-• **[2025.8.12]** Updated RoboTwin2 inference code
-
-H-RDT (**H**uman to **R**obotics **D**iffusion **T**ransformer) is a novel approach that leverages **large-scale egocentric human manipulation data** to enhance robot manipulation capabilities. Our key insight is that large-scale egocentric human manipulation videos with paired 3D hand pose annotations provide rich behavioral priors that capture natural manipulation strategies and can benefit robotic policy learning.
-
-## 🚀 Installation
-
-1. **Create conda environment:**
-   ```bash
-   conda create -n mivla python=3.10
-   conda activate mivla
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Download pre-trained models:**
-   ```bash
-   export HF_ENDPOINT=https://hf-mirror.com
-   huggingface-cli download --resume-download embodiedfoundation/H-RDT --local-dir ./
-   ```
-
-## 🔧 Usage
-
-### Stage 1: Human Data Pre-training (EgoDx)
-
-#### Data Preprocessing
-Before training, preprocess the EgoDx dataset:
-
-1. **Configure paths:**
-   ```bash
-   # Edit datasets/pretrain/setup_pretrain.sh with your paths
-   nano datasets/pretrain/setup_pretrain.sh
-   
-   # Set your EgoDx dataset and T5 model paths:
-   export EGODEX_DATA_ROOT="/path/to/your/egodx/dataset"
-   export T5_MODEL_PATH="/path/to/your/t5-v1_1-xxl"
-   ```
-
-2. **Setup environment:**
-   ```bash
-   source datasets/pretrain/setup_pretrain.sh
-   ```
-
-3. **Run data processing pipeline:**
-   ```bash
-   # Automatically runs: precompute_48d_actions.py → calc_stat.py → encode_lang_batch.py
-   ./datasets/pretrain/run_pretrain_pipeline.sh
-   ```
-
-#### Start Pre-training
-After data preprocessing is complete:
-
-**1. EgoDx Pretrain (fresh start):**
-1. Configure dataset:
-   ```python
-   # Edit datasets/dataset.py line ~45
-   self.dataset_name = "egodx"
-   ```
-2. Run training:
-   ```bash
-   bash pretrain.sh
-   ```
-
-**2. Pretrain Resume:**
-Edit `pretrain.sh`, add this line:
-```bash
---resume_from_checkpoint="checkpoint-450000" \
-```
-
-### Stage 2: Cross-Embodiment Fine-tuning
-
-#### Data Preprocessing (for RobotWin2)
-**Pre-computed language embeddings are already provided - no preprocessing needed!**
-
-1. **Setup environment:**
-   ```bash
-   # Edit datasets/robotwin2/setup_robotwin2.sh if needed (only for regenerating files)
-   source datasets/robotwin2/setup_robotwin2.sh
-   ```
-
-2. **Data processing pipeline (Not Required):**
-   ```bash
-   # Not needed - lang_embeddings/ already provided in repository
-   # Only run if you want to regenerate files:
-   # ./datasets/robotwin2/run_robotwin2_pipeline.sh
-   ```
-
-#### Robot Fine-tuning (load human pre-trained backbone):
-1. Configure dataset:
-   ```python
-   # Edit datasets/dataset.py line ~45
-   self.dataset_name = "robotwin_agilex"  # or your robot name
-   
-   # Add your dataset initialization if not exists:
-   elif self.dataset_name == "your_robot":
-       self.hdf5_dataset = YourRobotDataset(config=config)
-   ```
-2. Run training:
-   ```bash
-   bash finetune.sh  # Already configured with pretrained_backbone_path
-   ```
-
-#### Finetune Resume:
-Edit your current finetune script, make these changes:
-```bash
-# Change this line:
---mode="finetune" \
-# To:
---mode="pretrain" \
-
-# And add:
---resume_from_checkpoint="checkpoint-5000" \
-```
-
-## 🎯 Training Modes
-
-| Training Scenario | Base Script | Required Shell Script Modifications | Mode & Key Parameters |
-|-------------------|-------------|-------------------------------------|----------------------|
-| **Human Pretrain (Fresh)** | `pretrain.sh` | `--mode="pretrain"` | Start pretraining on EgoDx human data |
-| **Human Pretrain Resume** | `pretrain.sh` | Add: `--resume_from_checkpoint="checkpoint-450000" \` | `--mode="pretrain"` |
-| **Robot Fine-tuning** | `finetune.sh` | Change: `--mode="finetune" \`<br>Add: `--pretrained_backbone_path="./checkpoints/pretrain-0618/checkpoint-500000/pytorch_model.bin" \`<br>Change: `--config_path="configs/hrdt_finetune.yaml" \` | Load human pre-trained backbone, fresh action layers |
-| **Robot Finetune Resume** | Your finetune script | Change: `--mode="finetune"` → `--mode="pretrain"`<br>Add: `--resume_from_checkpoint="checkpoint-5000" \` | Continue robot fine-tuning |
-
-### Dataset Configuration
-
-Before training, you need to configure the dataset in `datasets/dataset.py`:
-
-#### For Human Pre-training (EgoDx):
-```python
-# In datasets/dataset.py, line ~45
-self.dataset_name = "egodx"
-
-# The EgoDxDataset will be automatically initialized
-```
-
-#### For Robot Fine-tuning:
-```python
-# In datasets/dataset.py, line ~45  
-self.dataset_name = "your_robot_name"  # e.g., "robotwin_agilex"
-
-# Add your dataset to the initialization logic:
-elif self.dataset_name == "your_robot_name":
-    self.hdf5_dataset = YourRobotDataset(
-        config=config,
-        # your dataset parameters
-    )
-```
-
-#### Adding New Robot Datasets:
-1. Create your dataset folder: `datasets/your_robot/`
-2. Implement your dataset class (see `datasets/robotwin2/` as example)
-3. Create data processing scripts (see `datasets/pretrain/` or `datasets/robotwin2/` as examples)
-4. Import in `datasets/dataset.py`
-5. Add initialization logic in `VLAConsumerDataset.__init__`
-
-### Key Configuration Files
-- `configs/hrdt_pretrain.yaml`: Human pre-training configuration
-- `configs/hrdt_finetune.yaml`: Robot fine-tuning configuration  
-- `datasets/dataset.py`: Dataset selection and initialization
-- Modify `state_dim`, `action_dim`, `output_size` for your robot
-
-## 📞 Contact Us
-
-### WeChat Discussion Group
-Join our WeChat group to discuss H-RDT related technical issues:
-
 <div align="center">
-<img src="assets/wechat_group_qr.jpg" width="200" alt="WeChat Group QR Code">
-<p><em>WeChat Group QR Code</em></p>
+
+# MiVLA
+
+### Towards Generalizable Vision-Language-Action Model with Human-Robot Mutual Imitation Pre-training
+
+**CVPR 2026 Findings**
+
+[Paper (arXiv)](https://arxiv.org/abs/2512.15411) · [CVPR 2026 Findings poster](https://cvpr.thecvf.com/virtual/2026/poster/40664) · [Demo video](web/videos/mivla_demo.mp4) · [Citation](#citation)
+
 </div>
 
-### Personal WeChat
-For other questions or collaboration opportunities, please add personal WeChat:
+MiVLA is a vision-language-action (VLA) model trained with **human-robot mutual imitation**. It uses egocentric human demonstrations and simulated robot demonstrations to learn complementary behavioral priors before adapting to target robot tasks. The contribution is a bidirectional human-robot action mapping and a cross-embodiment pre-training objective; the underlying diffusion Transformer backbone and software environment remain unchanged.
 
-<div align="center">
-<img src="assets/personal_wechat_qr.jpg" width="200" alt="Personal WeChat QR Code">
-<p><em>Personal WeChat QR Code</em></p>
-</div>
+![MiVLA architecture](web/images/mivla_architecture.png)
 
----
+## Highlights
 
-*Note: If the QR code expires, please contact us through project Issues for the latest contact information.*
+- **Bidirectional action alignment.** Kinematic transforms map human hand motion to robot end-effector motion and map robot demonstrations back to a human-hand representation.
+- **Mutual imitation pre-training.** For each demonstration, MiVLA predicts actions for the observed embodiment and complementary actions for the other embodiment.
+- **Unified action representation.** The 76D training representation combines 48D human-hand joints, 14D robot joints, and 14D end-effector poses.
+- **Cross-embodiment evaluation.** The paper evaluates RoboTwin 2.0 and three physical robot platforms: PiPER, ARX, and LocoMan.
+
+## Results
+
+The following numbers are reported in the paper. Simulation results are averages over the **20 tasks selected for the main RoboTwin 2.0 comparison**; physical robot results are averages over three downstream tasks after task-specific fine-tuning.
+
+| Evaluation | Metric | MiVLA |
+| --- | --- | ---: |
+| RoboTwin 2.0, easy mode (20 tasks) | Success rate | 69% |
+| RoboTwin 2.0, hard mode (20 tasks) | Success rate | 66% |
+| Physical robots: PiPER, ARX, LocoMan (3 tasks) | Full-task success rate | 55% |
+| Physical robots: PiPER, ARX, LocoMan (3 tasks) | Subtask completeness | 69% |
+
+The physical robot experiments use **30 expert demonstrations per task for fine-tuning**. The human-video and simulated-robot data are used in pre-training; the physical robot numbers are not zero-shot deployment results. See the [paper](https://arxiv.org/abs/2512.15411) for per-task comparisons and ablations.
+
+[![MiVLA demonstration](web/images/mivla_demo_poster.jpg)](web/videos/mivla_demo.mp4)
+
+## Repository layout
+
+| Path | Purpose |
+| --- | --- |
+| [models/](models/) | Vision, language, and diffusion action model implementations |
+| [datasets/](datasets/) | EgoDex, RoboTwin 2.0, and physical robot dataset loaders |
+| [data_process/](data_process/) | Human-robot action conversion and preprocessing scripts |
+| [configs/](configs/) | Training and model configurations |
+| [inference/robotwin2_example/](inference/robotwin2_example/) | RoboTwin 2.0 inference example |
+| [inference/real_example/](inference/real_example/) | Physical robot inference example |
+| [web/](web/) | Project visuals and demonstration video |
+
+## Installation
+
+Use the existing Python 3.10 environment and dependency versions:
+
+~~~bash
+git clone https://github.com/zhenhanyin/MiVLA.git
+cd MiVLA
+conda create -n mivla python=3.10
+conda activate mivla
+pip install -r requirements.txt
+~~~
+
+Training and inference require the corresponding datasets and model checkpoints. The repository does not include the raw EgoDex or RoboTwin 2.0 datasets or trained MiVLA checkpoints.
+
+## Data preparation
+
+### EgoDex human demonstrations
+
+Prepare the [EgoDex](https://arxiv.org/abs/2505.11709) dataset and update the data and T5 model paths in [datasets/pretrain/setup_pretrain.sh](datasets/pretrain/setup_pretrain.sh). The human-data preprocessing pipeline is:
+
+~~~bash
+source datasets/pretrain/setup_pretrain.sh
+bash datasets/pretrain/run_pretrain_pipeline.sh
+~~~
+
+This pipeline generates human action annotations, statistics, and language embeddings. For joint human-robot pre-training, also inspect the 76D dataset loader in [datasets/co_pretrain_v2/](datasets/co_pretrain_v2/) and the conversion scripts in [data_process/](data_process/).
+
+### RoboTwin 2.0 robot demonstrations
+
+Prepare the RoboTwin 2.0 demonstrations and set the dataset paths in [datasets/robotwin2/setup_robotwin2.sh](datasets/robotwin2/setup_robotwin2.sh) and [datasets/dataset.py](datasets/dataset.py). Precomputed language embeddings for RoboTwin tasks are included in the repository. The [RoboTwin data notes](datasets/robotwin2/README.md) describe how to regenerate them if needed.
+
+## Training
+
+The repository provides example launchers for the main stages:
+
+| Stage | Launcher |
+| --- | --- |
+| Human-robot co-pre-training | [Pretrain_co_pretrain_V2_76d.sh](Pretrain_co_pretrain_V2_76d.sh) |
+| RoboTwin 2.0 fine-tuning | [finetune_robotwin_76d_with_noise.sh](finetune_robotwin_76d_with_noise.sh) |
+| Physical robot fine-tuning | [finetune_real_76d_selective_14d_joint.sh](finetune_real_76d_selective_14d_joint.sh) |
+| Two-arm physical robot example | [two_arms_real_16d_from_v3.sh](two_arms_real_16d_from_v3.sh) |
+
+**Before running a launcher:** replace machine-specific absolute paths, dataset roots, checkpoint paths, CUDA device IDs, network interface settings, and output directories with values for your system. Check that the selected configuration matches the action dimensions and checkpoint you intend to use. The co-pre-training launcher currently points to a configuration filename that is not present in this checkout; [configs/pretrain_76d.yaml](configs/pretrain_76d.yaml) is the included 76D pre-training configuration to review when adapting it. These scripts are research examples and require local configuration.
+
+## Inference
+
+See the [RoboTwin 2.0 inference instructions](inference/robotwin2_example/README.md) and the [physical robot example](inference/real_example/). Supply a compatible checkpoint and update the paths and task settings for your target platform.
+
+## Citation
+
+If you use MiVLA in your research, please cite the **CVPR 2026 Findings** paper:
+
+~~~bibtex
+@inproceedings{yin2026mivla,
+  title     = {MiVLA: Towards Generalizable Vision-Language-Action Model with Human-Robot Mutual Imitation Pre-training},
+  author    = {Yin, Zhenhan and Wang, Xuanhan and Jiang, Jiahao and Deng, Kaiyuan and Chen, Pengqi and Li, Shuangle and Liu, Chong and Xu, Xing and Song, Jingkuan and Gao, Lianli and Shen, Heng Tao},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) Findings},
+  year      = {2026},
+  url       = {https://cvpr.thecvf.com/virtual/2026/poster/40664}
+}
+~~~
+
+## Contact
+
+For questions about the paper or repository, contact [yinzhenhan06@gmail.com](mailto:yinzhenhan06@gmail.com).
+
+## License
+
+This repository is released under the [Mozilla Public License 2.0](LICENSE).
