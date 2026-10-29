@@ -2,8 +2,6 @@
 
 <img src="web/images/mivla_logo.jpg" alt="MiVLA logo" width="420">
 
-# MiVLA
-
 ### Towards Generalizable Vision-Language-Action Model with Human-Robot Mutual Imitation Pre-training
 
 **CVPR 2026 Findings**
