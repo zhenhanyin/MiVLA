@@ -6,7 +6,12 @@
 
 **CVPR 2026 Findings**
 
-[Paper (arXiv)](https://arxiv.org/abs/2512.15411) · [Pretrained model (ModelScope)](https://modelscope.cn/models/Yinzhenhan/MiVLA) · [CVPR 2026 Findings poster](https://cvpr.thecvf.com/virtual/2026/poster/40664) · [Project homepage](https://mivla-research.github.io/) · [Citation](#citation)
+<a href="https://mivla-research.github.io/"><img src="https://img.shields.io/badge/Website-Project_Page-blue" alt="MiVLA project homepage"></a>
+<a href="https://arxiv.org/abs/2512.15411"><img src="https://img.shields.io/badge/Paper-arXiv-b31b1b" alt="MiVLA paper on arXiv"></a>
+<a href="https://modelscope.cn/models/Yinzhenhan/MiVLA"><img src="https://img.shields.io/badge/Model-ModelScope-purple" alt="MiVLA pretrained model on ModelScope"></a>
+<br>
+<a href="https://cvpr.thecvf.com/virtual/2026/poster/40664"><img src="https://img.shields.io/badge/CVPR_2026-Findings_Poster-orange" alt="CVPR 2026 Findings poster"></a>
+<a href="#citation"><img src="https://img.shields.io/badge/Citation-BibTeX-555555" alt="BibTeX citation"></a>
 
 </div>
 
