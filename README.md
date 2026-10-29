@@ -1,12 +1,14 @@
 <div align="center">
 
+<img src="web/images/mivla_logo.jpg" alt="MiVLA logo" width="420">
+
 # MiVLA
 
 ### Towards Generalizable Vision-Language-Action Model with Human-Robot Mutual Imitation Pre-training
 
 **CVPR 2026 Findings**
 
-[Paper (arXiv)](https://arxiv.org/abs/2512.15411) · [CVPR 2026 Findings poster](https://cvpr.thecvf.com/virtual/2026/poster/40664) · [Open or download demo MP4 (8.7 MB)](https://github.com/zhenhanyin/MiVLA/raw/main/web/videos/mivla_demo.mp4) · [Citation](#citation)
+[Paper (arXiv)](https://arxiv.org/abs/2512.15411) · [Pretrained model (ModelScope)](https://modelscope.cn/models/Yinzhenhan/MiVLA) · [CVPR 2026 Findings poster](https://cvpr.thecvf.com/virtual/2026/poster/40664) · [Open or download demo MP4 (8.7 MB)](https://github.com/zhenhanyin/MiVLA/raw/main/web/videos/mivla_demo.mp4) · [Citation](#citation)
 
 </div>
 
@@ -50,6 +52,10 @@ GitHub may not preview this MP4 on its repository file page. Use the link above 
 | [inference/real_example/](inference/real_example/) | Physical robot inference example |
 | [web/](web/) | Project visuals and demonstration video |
 
+## Pretrained Model
+
+The MiVLA pretrained model is available on [ModelScope](https://modelscope.cn/models/Yinzhenhan/MiVLA). Use a checkpoint compatible with the configuration and action representation selected for training or inference.
+
 ## Installation
 
 Use the existing Python 3.10 environment and dependency versions:
@@ -62,7 +68,7 @@ conda activate mivla
 pip install -r requirements.txt
 ~~~
 
-Training and inference require the corresponding datasets and model checkpoints. The repository does not include the raw EgoDex or RoboTwin 2.0 datasets or trained MiVLA checkpoints.
+Training and inference require the corresponding datasets and a compatible checkpoint. The pretrained MiVLA model is hosted on ModelScope; the repository does not include the raw EgoDex or RoboTwin 2.0 datasets or checkpoint weights.
 
 ## Data preparation
 
